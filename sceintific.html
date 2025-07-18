@@ -1,143 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Scientific Calculator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #1c1c1c;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Scientific Calculator</title>
+<style>
+    * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    body, html {
+        height: 100%;
+        background: #fff;
+        font-family: Arial, sans-serif;
+        color: white;
     }
 
-    .calculator {
-      background: #2e2e2e;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 20px #000;
-      width: 340px;
+        #calc {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #content {
+            background: #2c302c;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        #backspace {
+            background-color: rgb(237, 89, 30);
+            color: white;
+        }
+    #display {
+        width: 100%;
+        height: 50px;
+        font-size: 24px;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: none;
+        border-radius: 5px;
+        background: #fff;
+        color: #fff;
+        text-align: right;
+        user-select: none;
     }
-
-    .display {
-      width: 100%;
-      height: 50px;
-      font-size: 24px;
-      padding: 10px;
-      margin-bottom: 10px;
-      border: none;
-      border-radius: 5px;
-      background: #000;
-      color: #fff;
-      text-align: right;
-    }
-
     .buttons {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
     }
+    .buttons button {
+    padding: 15px;
+    font-size: 16px;
+    background: #fff;
+    color: #222;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+    user-select: none;
+}
 
-    button {
-      padding: 15px;
-      font-size: 16px;
-      background: #444;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.2s;
+    .buttons button:hover {
+        background: #666;
     }
-
-    button:hover {
-      background: #666;
-    }
-
     .span-2 {
-      grid-column: span 2;
+        grid-column: span 2;
     }
-  </style>
+</style>
 </head>
 <body>
-  <div class="calculator">
-    <input type="text" id="display" class="display" disabled />
-    <div class="buttons">
-      
-      <button onclick="append('(')">(</button>
-      <button onclick="append(')')">)</button>
-      <button onclick="append('/')">÷</button>
-      <button onclick="clearDisplay()">C</button>
-      <button onclick="deleteChar()">⌫</button>
+<div id="calc">
+    <div id="content">
+        <input type="text" id="display" disabled />
+        <div class="buttons">
+           
+            <button onclick="append('(')">(</button>
+            <button onclick="append(')')">)</button>
+            <button onclick="append('/')">÷</button>
+            <button onclick="clearDisplay()" style="background: rgb(237, 89, 30);">C</button>
+            <button onclick="deleteChar()" style="background: rgb(237, 89, 30);">⌫</button>
 
-      <button onclick="append('7')">7</button>
-      <button onclick="append('8')">8</button>
-      <button onclick="append('9')">9</button>
-      <button onclick="append('*')">×</button>
-      <button onclick="append('%')">%</button>
 
-      <button onclick="append('4')">4</button>
-      <button onclick="append('5')">5</button>
-      <button onclick="append('6')">6</button>
-      <button onclick="append('-')">−</button>
-      <button onclick="append('Math.sqrt(')">√</button>
+            <button onclick="append('7')">7</button>
+            <button onclick="append('8')">8</button>
+            <button onclick="append('9')">9</button>
+            <button onclick="append('*')">×</button>
+            <button onclick="append('%')">%</button>
 
-      <button onclick="append('1')">1</button>
-      <button onclick="append('2')">2</button>
-      <button onclick="append('3')">3</button>
-      <button onclick="append('+')">+</button>
-      <button onclick="append('Math.E')">e</button>
+            <button onclick="append('4')">4</button>
+            <button onclick="append('5')">5</button>
+            <button onclick="append('6')">6</button>
+            <button onclick="append('-')">−</button>
+            <button onclick="append('Math.sqrt(')">√</button>
 
-      <button onclick="append('0')">0</button>
-      <button onclick="append('.')">.</button>
-      <button onclick="append('Math.exp(')">eˣ</button>
-      <button onclick="append('Math.PI')">π</button>
+            <button onclick="append('1')">1</button>
+            <button onclick="append('2')">2</button>
+            <button onclick="append('3')">3</button>
+            <button onclick="append('+')">+</button>
+            <button onclick="append('Math.E')">e</button>
 
-      <button onclick="append('Math.log10(')">log</button>
-      
-      <button onclick="append('Math.sin(')">sin</button>
-      <button onclick="append('Math.cos(')">cos</button>
-      <button onclick="append('Math.tan(')">tan</button>
-      <button onclick="calculate()" class="span-2">=</button>
+            <button onclick="append('0')">0</button>
+            <button onclick="append('.')">.</button>
+            <button onclick="append('Math.exp(')">eˣ</button>
+            <button onclick="append('Math.PI')">π</button>
+
+            <button onclick="append('Math.log10(')">log</button>
+            <button onclick="append('Math.sin(')">sin</button>
+            <button onclick="append('Math.cos(')">cos</button>
+            <button onclick="append('Math.tan(')">tan</button>
+            <button onclick="calculate()" class="span-2" >=</button>
+        </div>
     </div>
-  </div>
+</div>
 
-  <script>
+<script>
     const display = document.getElementById("display");
 
     function append(value) {
-      if (value === '%') {
-        display.value += '/100';
-      } else {
-        display.value += value;
-      }
+        if (value === '%') {
+            display.value += '/100';
+        } else {
+            display.value += value;
+        }
     }
 
     function clearDisplay() {
-      display.value = "";
+        display.value = "";
     }
 
     function deleteChar() {
-      display.value = display.value.slice(0, -1);
+        display.value = display.value.slice(0, -1);
     }
 
     function calculate() {
-      try {
-        let open = (display.value.match(/\(/g) || []).length;
-        let close = (display.value.match(/\)/g) || []).length;
-        let diff = open - close;
-        if (diff > 0) {
-          display.value += ')'.repeat(diff);
+        try {
+            // Balance parentheses
+            const open = (display.value.match(/\(/g) || []).length;
+            const close = (display.value.match(/\)/g) || []).length;
+            if (open > close) {
+                display.value += ')'.repeat(open - close);
+            }
+            // Evaluate expression
+            display.value = eval(display.value);
+        } catch {
+            display.value = "Error";
         }
-        display.value = eval(display.value);
-      } catch (e) {
-        display.value = "Error";
-      }
     }
-  </script>
+
+    // Keyboard support (optional)
+    document.addEventListener('keydown', e => {
+        const key = e.key;
+        const validKeys = "0123456789+-*/().%";
+        if (validKeys.includes(key)) {
+            append(key);
+        } else if (key === "Enter") {
+            calculate();
+        } else if (key === "Backspace") {
+            deleteChar();
+        } else if (key.toLowerCase() === "c") {
+            clearDisplay();
+        }
+    });
+</script>
 </body>
 </html>
