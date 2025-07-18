@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Advanced Scientific Calculator</title>
+  <style>
+    /* Adapted from your first code's style */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body, html {
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .calculator {
+      background: #2c302c;
+      padding: 20px;
+      border-radius: 10px;
+      width: 420px;
+      box-shadow: 0 0 15px #00bcd4;
+    }
+    #display {
+      background: #000;
+      color: #0ff;
+      font-size: 25px;
+      padding: 15px 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      overflow-x: auto;
+      white-space: nowrap;
+      text-align: right;
+      user-select: none;
+      height: 50px;
+      line-height: 20px;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+    }
+    button {
+      border: none;
+      outline: none;
+      height: 50px;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      user-select: none;
+      background: #fff;     /* white background */
+      color: #000;          /* black text */
+      transition: background 0.3s, color 0.3s;
+    }
+    button:hover {
+      background: #00bcd4;
+      color: #222;          /* dark text on hover */
+    }
+    button.operator {
+      background: #fff;
+      color: #000;
+    }
+    button.operator:hover {
+      background: #00acc1;
+      color: #222;
+    }
+    button.equal {
+      grid-column: span 2;
+      background: #fff;
+      font-weight: bold;
+      color: #000;
+    }
+    button.equal:hover {
+      background: #26a69a;
+      color: #222;
+    }
+    button.clear {
+      background: #fff;
+      color: #000;
+    }
+    button.clear:hover {
+      background: #e53935;
+      color: #222;
+    }
+    #clear {
+            background-color: rgb(237, 89, 30);
+            color: white;
+        }
+    #backspace {
+        background-color: rgb(237, 89, 30);
+        color: white;
+    }
+    button#backspace:hover {
+      background-color: #e53935;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator" role="application" aria-label="Advanced Scientific Calculator">
+    <div id="display" aria-live="polite" aria-atomic="true">0</div>
+    <div class="buttons">
+      <!-- Row 1 -->
+      <button class="operator" aria-label="Open parenthesis" data-value="(">(</button>
+      <button class="operator" aria-label="Close parenthesis" data-value=")">)</button>
+      <button class="operator" aria-label="Exponentiation" data-value="^">^</button>
+      <button class="operator" aria-label="Divide" data-value="/">÷</button>
+      <button class="clear" aria-label="Clear all" id="clear">C</button>
+      <button id="backspace" aria-label="Delete last">⌫</button>
+
+      <!-- Row 2 -->
+      <button aria-label="7" data-value="7">7</button>
+      <button aria-label="8" data-value="8">8</button>
+      <button aria-label="9" data-value="9">9</button>
+      <button class="operator" aria-label="Multiply" data-value="*">×</button>
+      <button class="operator" aria-label="Factorial" data-value="!">!</button>
+      <button class="operator" aria-label="Modulo" data-value="%">mod</button>
+
+      <!-- Row 3 -->
+      <button aria-label="4" data-value="4">4</button>
+      <button aria-label="5" data-value="5">5</button>
+      <button aria-label="6" data-value="6">6</button>
+      <button class="operator" aria-label="Minus" data-value="-">−</button>
+      <button class="operator" aria-label="Natural logarithm" data-value="ln(">ln</button>
+      <button class="operator" aria-label="Log base 10" data-value="log(">log</button>
+
+      <!-- Row 4 -->
+      <button aria-label="1" data-value="1">1</button>
+      <button aria-label="2" data-value="2">2</button>
+      <button aria-label="3" data-value="3">3</button>
+      <button class="operator" aria-label="Plus" data-value="+">+</button>
+      <button class="operator" aria-label="Floor function" data-value="floor(">floor</button>
+
+      <!-- Row 5 -->
+      <button aria-label="0" data-value="0">0</button>
+      <button aria-label="Decimal point" data-value=".">.</button>
+      <button class="operator" aria-label="Absolute value" data-value="abs(">abs</button>
+      <button class="operator" aria-label="Exponential function e^x" data-value="exp(">exp</button>
+      <button class="operator" aria-label="Round function" data-value="round(">round</button>
+
+      <!-- Row 6 -->
+      <button class="operator" aria-label="Power function pow(x,y)" data-value="pow(">pow</button>
+      <button class="operator" aria-label="Comma for function arguments" data-value=",">,</button>
+      <button class="operator" aria-label="Cube root" data-value="cbrt(">³√</button>
+      <button class="operator" aria-label="Inverse sine (asin)" data-value="asin(">asin</button>
+      <button class="operator" aria-label="Inverse cosine (acos)" data-value="acos(">acos</button>
+      <button class="operator" aria-label="Inverse tangent (atan)" data-value="atan(">atan</button>
+      <button class="equal" aria-label="Calculate result" id="equals">=</button>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const display = document.getElementById('display');
+  const buttons = document.querySelectorAll('button[data-value]');
+  const clearBtn = document.getElementById('clear');
+  const backspaceBtn = document.getElementById('backspace');
+  const equalsBtn = document.getElementById('equals');
+
+  let expression = '';
+
+  function factorial(n) {
+    if (n < 0) return NaN;
+    if (n === 0 || n === 1) return 1;
+    if (!Number.isInteger(n)) return NaN;
+    let f = 1;
+    for (let i = 2; i <= n; i++) f *= i;
+    return f;
+  }
+
+  function radToDeg(rad) {
+    return rad * (180 / Math.PI);
+  }
+
+  // Wrapped inverse trig functions returning degrees
+  function asinDeg(x) {
+    return radToDeg(Math.asin(x));
+  }
+  function acosDeg(x) {
+    return radToDeg(Math.acos(x));
+  }
+  function atanDeg(x) {
+    return radToDeg(Math.atan(x));
+  }
+
+  function prepareExpression(expr) {
+    return expr
+      .replace(/cbrt\(/g, 'Math.cbrt(')
+      .replace(/floor\(/g, 'Math.floor(')
+      .replace(/abs\(/g, 'Math.abs(')
+      .replace(/exp\(/g, 'Math.exp(')
+      .replace(/round\(/g, 'Math.round(')
+      .replace(/pow\(/g, 'Math.pow(')
+      .replace(/log\(/g, 'Math.log10(')
+      .replace(/ln\(/g, 'Math.log(')
+      .replace(/asin\(/g, 'asinDeg(')
+      .replace(/acos\(/g, 'acosDeg(')
+      .replace(/atan\(/g, 'atanDeg(')
+      .replace(/\^/g, '**')
+      .replace(/mod/g, '%');
+  }
+
+  function evalFactorials(expr) {
+    const regex = /(\d+(\.\d+)?|\([^()]*\))!/;
+    while (regex.test(expr)) {
+      expr = expr.replace(regex, (match, g1) => {
+        let val;
+        if (g1.startsWith('(')) {
+          val = safeEval(g1.slice(1, -1));
+        } else {
+          val = parseFloat(g1);
+        }
+        let fact = factorial(val);
+        if (isNaN(fact)) return 'NaN';
+        return fact.toString();
+      });
+    }
+    return expr;
+  }
+
+  function safeEval(expr) {
+    try {
+      expr = evalFactorials(expr);
+      expr = prepareExpression(expr);
+      // Using Function constructor with our wrapped trig funcs
+      return Function('asinDeg', 'acosDeg', 'atanDeg', 'Math', `return ${expr}`)(asinDeg, acosDeg, atanDeg, Math);
+    } catch {
+      return 'Error';
+    }
+  }
+
+  function updateDisplay() {
+    display.textContent = expression || '0';
+  }
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const val = button.getAttribute('data-value');
+
+      // Prevent invalid placement of factorial (!)
+      if (val === '!') {
+        if (!expression || !/[0-9)\!]/.test(expression.slice(-1))) return;
+      }
+      expression += val;
+      updateDisplay();
+    });
+  });
+
+  clearBtn.addEventListener('click', () => {
+    expression = '';
+    updateDisplay();
+  });
+
+  backspaceBtn.addEventListener('click', () => {
+    expression = expression.slice(0, -1);
+    updateDisplay();
+  });
+
+  equalsBtn.addEventListener('click', () => {
+    if (!expression) return;
+    const result = safeEval(expression);
+    if (result === 'Error' || result === undefined || Number.isNaN(result)) {
+      display.textContent = 'Error';
+      expression = '';
+    } else {
+      // Limit decimals to 10 digits max
+      const fixedResult = typeof result === 'number' ? +result.toFixed(10) : result;
+      display.textContent = fixedResult;
+      expression = fixedResult.toString();
+    }
+  });
+
+  // Optional: keyboard support
+  document.addEventListener('keydown', (e) => {
+    const allowedKeys = '0123456789+-*/%^().,';
+    if (allowedKeys.includes(e.key)) {
+      expression += e.key;
+      updateDisplay();
+    } else if (e.key === 'Enter' || e.key === '=') {
+      e.preventDefault();
+      equalsBtn.click();
+    } else if (e.key === 'Backspace') {
+      expression = expression.slice(0, -1);
+      updateDisplay();
+    } else if (e.key === 'Delete') {
+      expression = '';
+      updateDisplay();
+    }
+  });
+
+  updateDisplay();
+})();
+</script>
+</body>
+</html>
